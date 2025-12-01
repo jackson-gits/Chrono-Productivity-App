@@ -5,6 +5,7 @@ import { Switch } from './ui/switch';
 import { Label } from './ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { Slider } from './ui/slider';
+import { DataViewer } from './DataViewer';
 
 export function Settings() {
   const [notifications, setNotifications] = useState({
@@ -37,6 +38,9 @@ export function Settings() {
         <h2 className="text-gray-900">Settings</h2>
         <p className="text-gray-600">Customize your Chrono experience</p>
       </div>
+
+      {/* Data Viewer */}
+      <DataViewer />
 
       {/* Notifications */}
       <Card>

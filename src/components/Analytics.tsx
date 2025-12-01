@@ -60,7 +60,7 @@ export function Analytics() {
       {/* Key Metrics */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <Card>
-          <CardContent className="p-4">
+          <CardContent className="pt-4">
             <div className="space-y-2">
               <p className="text-sm text-gray-600">Completion Rate</p>
               <p className="text-2xl text-gray-900">{Math.round(completionRate)}%</p>
@@ -70,7 +70,7 @@ export function Analytics() {
         </Card>
 
         <Card>
-          <CardContent className="p-4">
+          <CardContent className="pt-4">
             <div className="space-y-2">
               <p className="text-sm text-gray-600">Current Streak</p>
               <p className="text-2xl text-gray-900">{streak} days</p>
@@ -80,8 +80,8 @@ export function Analytics() {
         </Card>
 
         <Card>
-          <CardContent className="p-4">
-            <div className="space-y-2">
+          <CardContent className="pt-4">
+            <div className="space-y-2 ">
               <p className="text-sm text-gray-600">Focus Sessions</p>
               <p className="text-2xl text-gray-900">{totalFocusSessions}</p>
               <p className="text-xs text-gray-600">{totalFocusMinutes} minutes</p>
@@ -90,7 +90,7 @@ export function Analytics() {
         </Card>
 
         <Card>
-          <CardContent className="p-4">
+          <CardContent className="pt-4">
             <div className="space-y-2">
               <p className="text-sm text-gray-600">Total Points</p>
               <p className="text-2xl text-gray-900">{totalPoints}</p>

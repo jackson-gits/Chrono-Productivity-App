@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import { api } from '../utils/api';
 
 export interface Subtask {
   id: string;
@@ -87,7 +88,7 @@ const checkBadges = (tasks: Task[], currentBadges: Badge[]): Badge[] => {
 
 export const useTaskStore = create<TaskStore>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       tasks: [
         {
           id: '1',
@@ -158,7 +159,12 @@ export const useTaskStore = create<TaskStore>()(
             subtasks,
             createdAt: new Date().toISOString(),
           };
-          return { tasks: [...state.tasks, newTask] };
+          const updatedTasks = [...state.tasks, newTask];
+          
+          // Sync to Supabase
+          api.saveTasks(updatedTasks).catch(err => console.error('Failed to sync tasks:', err));
+          
+          return { tasks: updatedTasks };
         }),
 
       toggleTask: (taskId) =>
@@ -177,6 +183,14 @@ export const useTaskStore = create<TaskStore>()(
           const pointsPerTask = 10;
           const newPoints = state.totalPoints + (updatedTasks.find(t => t.id === taskId)?.completed ? pointsPerTask : -pointsPerTask);
           const newBadges = checkBadges(updatedTasks, state.badges);
+          
+          // Sync to Supabase
+          api.saveTasks(updatedTasks).catch(err => console.error('Failed to sync tasks:', err));
+          api.saveUserData({
+            streak: state.streak,
+            totalPoints: Math.max(0, newPoints),
+            badges: newBadges,
+          }).catch(err => console.error('Failed to sync user data:', err));
           
           return {
             tasks: updatedTasks,
@@ -202,13 +216,21 @@ export const useTaskStore = create<TaskStore>()(
             return task;
           });
           
+          // Sync to Supabase
+          api.saveTasks(updatedTasks).catch(err => console.error('Failed to sync tasks:', err));
+          
           return { tasks: updatedTasks };
         }),
 
       deleteTask: (taskId) =>
-        set((state) => ({
-          tasks: state.tasks.filter((task) => task.id !== taskId),
-        })),
+        set((state) => {
+          const updatedTasks = state.tasks.filter((task) => task.id !== taskId);
+          
+          // Sync to Supabase
+          api.saveTasks(updatedTasks).catch(err => console.error('Failed to sync tasks:', err));
+          
+          return { tasks: updatedTasks };
+        }),
     }),
     {
       name: 'chrono-task-storage',

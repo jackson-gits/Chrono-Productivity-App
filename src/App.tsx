@@ -4,10 +4,12 @@ import { TaskManager } from './components/TaskManager';
 import { FocusTimer } from './components/FocusTimer';
 import { Analytics } from './components/Analytics';
 import { Settings } from './components/Settings';
-import { Home, CheckSquare, Timer, BarChart3, SettingsIcon } from 'lucide-react';
+import { Home, CheckSquare, Timer, BarChart3, SettingsIcon, Cloud, CloudOff } from 'lucide-react';
+import { useSupabaseSync } from './hooks/useSupabaseSync';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('dashboard');
+  const { isLoading, error } = useSupabaseSync();
 
   const renderContent = () => {
     switch (activeTab) {
@@ -40,6 +42,24 @@ export default function App() {
                 <h1 className="text-indigo-900">Chrono</h1>
                 <p className="text-gray-500 text-sm">Productivity-Based Learning</p>
               </div>
+            </div>
+            <div className="flex items-center gap-2">
+              {isLoading ? (
+                <div className="flex items-center gap-2 text-gray-500 text-sm">
+                  <Cloud className="w-4 h-4 animate-pulse" />
+                  <span>Syncing...</span>
+                </div>
+              ) : error ? (
+                <div className="flex items-center gap-2 text-orange-600 text-sm">
+                  <CloudOff className="w-4 h-4" />
+                  <span>Offline</span>
+                </div>
+              ) : (
+                <div className="flex items-center gap-2 text-green-600 text-sm">
+                  <Cloud className="w-4 h-4" />
+                  <span>Synced</span>
+                </div>
+              )}
             </div>
           </div>
         </div>

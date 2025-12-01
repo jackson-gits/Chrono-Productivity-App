@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import { api } from '../utils/api';
 
 interface FocusSession {
   id: string;
@@ -17,7 +18,7 @@ interface FocusStore {
 
 export const useFocusStore = create<FocusStore>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       sessions: [],
       totalFocusSessions: 12,
       totalFocusMinutes: 300,
@@ -31,10 +32,21 @@ export const useFocusStore = create<FocusStore>()(
             completed: true,
           };
 
+          const updatedSessions = [...state.sessions, newSession];
+          const newTotalSessions = state.totalFocusSessions + 1;
+          const newTotalMinutes = state.totalFocusMinutes + duration;
+          
+          // Sync to Supabase
+          api.saveFocusSessions(updatedSessions).catch(err => console.error('Failed to sync focus sessions:', err));
+          api.saveUserData({
+            totalFocusSessions: newTotalSessions,
+            totalFocusMinutes: newTotalMinutes,
+          }).catch(err => console.error('Failed to sync user data:', err));
+
           return {
-            sessions: [...state.sessions, newSession],
-            totalFocusSessions: state.totalFocusSessions + 1,
-            totalFocusMinutes: state.totalFocusMinutes + duration,
+            sessions: updatedSessions,
+            totalFocusSessions: newTotalSessions,
+            totalFocusMinutes: newTotalMinutes,
           };
         }),
     }),

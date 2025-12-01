@@ -39,7 +39,7 @@ export function Dashboard() {
       {/* Stats Grid */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <Card>
-          <CardContent className="p-4">
+          <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-600">Streak</p>
@@ -53,7 +53,7 @@ export function Dashboard() {
         </Card>
 
         <Card>
-          <CardContent className="p-4">
+          <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-600">Points</p>
@@ -67,7 +67,7 @@ export function Dashboard() {
         </Card>
 
         <Card>
-          <CardContent className="p-4">
+          <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-600">Today</p>
@@ -81,7 +81,7 @@ export function Dashboard() {
         </Card>
 
         <Card>
-          <CardContent className="p-4">
+          <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-600">Completion</p>

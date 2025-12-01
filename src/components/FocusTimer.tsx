@@ -95,7 +95,7 @@ export function FocusTimer() {
 
       {/* Main Timer Card */}
       <Card className="bg-gradient-to-br from-indigo-50 to-purple-50 border-2">
-        <CardContent className="p-8">
+        <CardContent className="pt-4">
           <div className="space-y-6">
             {/* Mode Selector */}
             <div className="flex justify-center gap-4">
