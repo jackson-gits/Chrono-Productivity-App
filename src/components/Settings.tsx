@@ -281,7 +281,7 @@ export function Settings() {
 
       {/* About */}
       <Card className="bg-gradient-to-br from-indigo-50 to-purple-50">
-        <CardContent className="p-6">
+        <CardContent className="pt-2">
           <div className="text-center space-y-2">
             <div className="w-16 h-16 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-xl flex items-center justify-center mx-auto mb-4">
               <Clock className="w-8 h-8 text-white" />

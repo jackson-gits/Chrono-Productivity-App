@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useTaskStore } from '../store/taskStore';
 import { Plus, ChevronDown, ChevronRight, CheckCircle2, Circle } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
+import { Card, CardContent } from './ui/card';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from './ui/dialog';
@@ -67,7 +67,6 @@ export function TaskManager() {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-gray-900">Task Manager</h2>
@@ -80,10 +79,11 @@ export function TaskManager() {
               Add Task
             </Button>
           </DialogTrigger>
-          <DialogContent className="max-w-md">
+          <DialogContent>
             <DialogHeader>
               <DialogTitle>Create New Task</DialogTitle>
             </DialogHeader>
+
             <div className="space-y-4 py-4">
               <div className="space-y-2">
                 <Label htmlFor="title">Task Title *</Label>
@@ -154,11 +154,19 @@ export function TaskManager() {
                   type="number"
                   min="1"
                   value={newTask.estimatedHours}
-                  onChange={(e) => setNewTask({ ...newTask, estimatedHours: parseInt(e.target.value) || 1 })}
+                  onChange={(e) =>
+                    setNewTask({
+                      ...newTask,
+                      estimatedHours: parseInt(e.target.value) || 1
+                    })
+                  }
                 />
               </div>
 
-              <Button onClick={handleAddTask} className="w-full bg-indigo-600 hover:bg-indigo-700">
+              <Button
+                onClick={handleAddTask}
+                className="w-full bg-indigo-600 hover:bg-indigo-700"
+              >
                 Create Task
               </Button>
             </div>
@@ -166,7 +174,6 @@ export function TaskManager() {
         </Dialog>
       </div>
 
-      {/* Filter Tabs */}
       <div className="flex gap-2">
         <Button
           variant={filter === 'all' ? 'default' : 'outline'}
@@ -191,7 +198,6 @@ export function TaskManager() {
         </Button>
       </div>
 
-      {/* Tasks List */}
       <div className="space-y-3">
         {filteredTasks.length === 0 ? (
           <Card>
@@ -207,9 +213,8 @@ export function TaskManager() {
 
             return (
               <Card key={task.id} className={task.completed ? 'opacity-75' : ''}>
-                <CardContent className="p-4">
+                <CardContent className="pt-4">
                   <div className="space-y-3">
-                    {/* Main Task */}
                     <div className="flex items-start gap-3">
                       <button
                         onClick={() => toggleTask(task.id)}
@@ -267,7 +272,6 @@ export function TaskManager() {
                       </div>
                     </div>
 
-                    {/* Subtasks */}
                     {isExpanded && task.subtasks.length > 0 && (
                       <div className="ml-9 space-y-2 pt-2 border-l-2 border-gray-200 pl-4">
                         {task.subtasks.map(subtask => (
