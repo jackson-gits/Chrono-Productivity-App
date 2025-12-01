@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Bell, Clock, Moon, Smartphone, Volume2, Zap } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from './ui/card';
 import { Switch } from './ui/switch';
@@ -6,6 +6,7 @@ import { Label } from './ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { Slider } from './ui/slider';
 import { DataViewer } from './DataViewer';
+import React from 'react';
 
 export function Settings() {
   const [notifications, setNotifications] = useState({
@@ -22,7 +23,19 @@ export function Settings() {
     soundEnabled: true,
     autoStartBreak: false,
   });
-
+  useEffect(() => {
+    const root = document.documentElement;
+  
+    if (preferences.theme === "dark") {
+      root.classList.add("dark");
+    } else if (preferences.theme === "light") {
+      root.classList.remove("dark");
+    } else {
+      const system = window.matchMedia("(prefers-color-scheme: dark)").matches;
+      root.classList.toggle("dark", system);
+    }
+  }, [preferences.theme]);
+  
   const handleNotificationToggle = (key: keyof typeof notifications) => {
     setNotifications(prev => ({ ...prev, [key]: !prev[key] }));
   };
