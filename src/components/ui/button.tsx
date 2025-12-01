@@ -11,11 +11,17 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     const baseStyles =
       "inline-flex items-center justify-center rounded-lg transition-colors disabled:pointer-events-none disabled:opacity-50";
 
+    // Theme colors
+    const darkBrown = "bg-[#4B2E23] text-white hover:bg-[#3A241B]";
+    const amberBorder = "border border-[#E6B878] text-[#4B2E23] hover:bg-[#FFF2D6]";
+    const amberGhost = "text-[#4B2E23] hover:bg-[#FFECCE]";
+    const destructive = "bg-red-600 text-white hover:bg-red-700";
+
     const variants = {
-      default: "bg-indigo-600 text-white hover:bg-indigo-700",
-      outline: "border border-gray-300 bg-white hover:bg-gray-50",
-      ghost: "hover:bg-gray-100",
-      destructive: "bg-red-600 text-white hover:bg-red-700",
+      default: darkBrown,
+      outline: amberBorder,
+      ghost: amberGhost,
+      destructive: destructive,
     };
 
     const sizes = {

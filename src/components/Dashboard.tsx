@@ -29,15 +29,22 @@ export function Dashboard() {
   });
 
   return (
-    <div className="space-y-6">
-      {/* Welcome Section */}
-      <div className="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl p-6 text-white">
-        <h2 className="text-white mb-2">Welcome back, Student! 👋</h2>
-        <p className="text-indigo-100">Let's make today productive</p>
+    <div className="space-y-6 bg-white">
+      
+      {/* Smaller Welcome Section */}
+      <div className="
+        rounded-xl p-5 shadow-md 
+        bg-[#5A3E2B]
+        text-white 
+        w-full
+      ">
+        <h2 className="font-semibold text-lg">Welcome back 👋</h2>
+        <p className="text-[#F5E9D7] text-sm">Let’s make today productive</p>
       </div>
 
       {/* Stats Grid */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        
         <Card>
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
@@ -45,8 +52,8 @@ export function Dashboard() {
                 <p className="text-sm text-gray-600">Streak</p>
                 <p className="text-gray-900">{streak} days</p>
               </div>
-              <div className="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center">
-                <Flame className="w-6 h-6 text-orange-600" />
+              <div className="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center">
+                <Flame className="w-5 h-5 text-orange-600" />
               </div>
             </div>
           </CardContent>
@@ -59,8 +66,8 @@ export function Dashboard() {
                 <p className="text-sm text-gray-600">Points</p>
                 <p className="text-gray-900">{totalPoints}</p>
               </div>
-              <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
-                <Award className="w-6 h-6 text-purple-600" />
+              <div className="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center">
+                <Award className="w-5 h-5 text-purple-600" />
               </div>
             </div>
           </CardContent>
@@ -73,8 +80,8 @@ export function Dashboard() {
                 <p className="text-sm text-gray-600">Today</p>
                 <p className="text-gray-900">{completedToday}/{totalToday}</p>
               </div>
-              <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
-                <Target className="w-6 h-6 text-green-600" />
+              <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                <Target className="w-5 h-5 text-green-600" />
               </div>
             </div>
           </CardContent>
@@ -87,12 +94,13 @@ export function Dashboard() {
                 <p className="text-sm text-gray-600">Completion</p>
                 <p className="text-gray-900">{Math.round(progressPercentage)}%</p>
               </div>
-              <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                <TrendingUp className="w-6 h-6 text-blue-600" />
+              <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                <TrendingUp className="w-5 h-5 text-blue-600" />
               </div>
             </div>
           </CardContent>
         </Card>
+
       </div>
 
       {/* Today's Progress */}
@@ -129,7 +137,10 @@ export function Dashboard() {
           <CardContent>
             <div className="space-y-3">
               {urgentTasks.map(task => {
-                const daysUntilDue = Math.ceil((new Date(task.dueDate).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24));
+                const daysUntilDue = Math.ceil(
+                  (new Date(task.dueDate).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24)
+                );
+
                 return (
                   <div key={task.id} className="flex items-center justify-between p-3 bg-red-50 rounded-lg border border-red-100">
                     <div className="flex-1">
@@ -158,7 +169,7 @@ export function Dashboard() {
           ) : (
             <div className="space-y-3">
               {upcomingTasks.map(task => (
-                <div key={task.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                <div key={task.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition">
                   <div className="flex-1">
                     <p className="text-gray-900">{task.title}</p>
                     <p className="text-sm text-gray-600">{task.subject}</p>
@@ -177,6 +188,7 @@ export function Dashboard() {
           )}
         </CardContent>
       </Card>
+
     </div>
   );
 }

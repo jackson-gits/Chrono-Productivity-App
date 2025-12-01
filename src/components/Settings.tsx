@@ -216,68 +216,105 @@ export function Settings() {
 
       {/* Integrations */}
       <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-gray-900">
-            <Zap className="w-5 h-5" />
-            Integrations
-          </CardTitle>
-          <CardDescription>
-            Connect with educational platforms
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-3">
-          <div className="p-4 border rounded-lg hover:bg-gray-50 cursor-pointer">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                  <Smartphone className="w-5 h-5 text-blue-600" />
-                </div>
-                <div>
-                  <p className="text-gray-900">Google Classroom</p>
-                  <p className="text-sm text-gray-500">Not connected</p>
-                </div>
-              </div>
-              <button className="px-4 py-2 text-sm bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">
-                Connect
-              </button>
-            </div>
-          </div>
+  <CardHeader>
+    <CardTitle className="flex items-center gap-2 text-gray-900">
+      <Zap className="w-5 h-5" />
+      Integrations
+    </CardTitle>
+    <CardDescription>
+      Connect with educational platforms
+    </CardDescription>
+  </CardHeader>
 
-          <div className="p-4 border rounded-lg hover:bg-gray-50 cursor-pointer">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center">
-                  <Smartphone className="w-5 h-5 text-orange-600" />
-                </div>
-                <div>
-                  <p className="text-gray-900">Moodle</p>
-                  <p className="text-sm text-gray-500">Not connected</p>
-                </div>
-              </div>
-              <button className="px-4 py-2 text-sm bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">
-                Connect
-              </button>
-            </div>
-          </div>
+  <CardContent className="space-y-3">
 
-          <div className="p-4 border rounded-lg hover:bg-gray-50 cursor-pointer">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
-                  <Smartphone className="w-5 h-5 text-purple-600" />
-                </div>
-                <div>
-                  <p className="text-gray-900">Microsoft Teams</p>
-                  <p className="text-sm text-gray-500">Not connected</p>
-                </div>
-              </div>
-              <button className="px-4 py-2 text-sm bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">
-                Connect
-              </button>
-            </div>
+    {/* Google Classroom */}
+    <div className="p-4 border rounded-lg hover:bg-gray-50 cursor-pointer">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+            <Smartphone className="w-5 h-5 text-blue-600" />
           </div>
-        </CardContent>
-      </Card>
+          <div>
+            <p className="text-gray-900">Google Classroom</p>
+            <p className="text-sm text-gray-500">Not connected</p>
+          </div>
+        </div>
+
+        <button
+          className="
+            px-4 py-2 text-sm 
+            bg-[#4B2E23] 
+            text-white 
+            rounded-lg 
+            hover:bg-[#3A241B] 
+            transition
+          "
+        >
+          Connect
+        </button>
+      </div>
+    </div>
+
+    {/* Moodle */}
+    <div className="p-4 border rounded-lg hover:bg-gray-50 cursor-pointer">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center">
+            <Smartphone className="w-5 h-5 text-orange-600" />
+          </div>
+          <div>
+            <p className="text-gray-900">Moodle</p>
+            <p className="text-sm text-gray-500">Not connected</p>
+          </div>
+        </div>
+
+        <button
+          className="
+            px-4 py-2 text-sm 
+            bg-[#4B2E23] 
+            text-white 
+            rounded-lg 
+            hover:bg-[#3A241B] 
+            transition
+          "
+        >
+          Connect
+        </button>
+      </div>
+    </div>
+
+    {/* Microsoft Teams */}
+    <div className="p-4 border rounded-lg hover:bg-gray-50 cursor-pointer">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
+            <Smartphone className="w-5 h-5 text-purple-600" />
+          </div>
+          <div>
+            <p className="text-gray-900">Microsoft Teams</p>
+            <p className="text-sm text-gray-500">Not connected</p>
+          </div>
+        </div>
+
+        <button
+          className="
+            px-4 py-2 text-sm 
+            bg-[#4B2E23] 
+            text-white 
+            rounded-lg 
+            hover:bg-[#3A241B] 
+            transition
+          "
+        >
+          Connect
+        </button>
+      </div>
+    </div>
+
+  </CardContent>
+</Card>
+
 
       {/* About */}
       <Card className="bg-gradient-to-br from-indigo-50 to-purple-50">

@@ -9,13 +9,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
 export function FocusTimer() {
   const { totalFocusSessions, addFocusSession } = useFocusStore();
   const [mode, setMode] = useState<'focus' | 'break'>('focus');
-  const [timeLeft, setTimeLeft] = useState(25 * 60); // 25 minutes in seconds
+  const [timeLeft, setTimeLeft] = useState(25 * 60);
   const [isRunning, setIsRunning] = useState(false);
   const [sessionStartTime, setSessionStartTime] = useState<number | null>(null);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
-  const focusDuration = 25 * 60; // 25 minutes
-  const breakDuration = 5 * 60; // 5 minutes
+  const focusDuration = 25 * 60;
+  const breakDuration = 5 * 60;
 
   useEffect(() => {
     if (isRunning) {
@@ -29,28 +29,20 @@ export function FocusTimer() {
         });
       }, 1000);
     } else {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-      }
+      if (intervalRef.current) clearInterval(intervalRef.current);
     }
 
-    return () => {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-      }
-    };
+    return () => intervalRef.current && clearInterval(intervalRef.current);
   }, [isRunning]);
 
   const handleTimerComplete = () => {
     setIsRunning(false);
-    
+
     if (mode === 'focus') {
       addFocusSession(25);
-      // Auto-switch to break
       setMode('break');
       setTimeLeft(breakDuration);
     } else {
-      // Auto-switch back to focus
       setMode('focus');
       setTimeLeft(focusDuration);
     }
@@ -89,28 +81,38 @@ export function FocusTimer() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h2 className="text-gray-900">Focus Timer</h2>
-        <p className="text-gray-600">Stay focused with the Pomodoro technique</p>
+        <h2 className="text-[#4B2E23]">Focus Timer</h2>
+        <p className="text-amber-800">Stay focused with the Pomodoro technique</p>
       </div>
 
-      {/* Main Timer Card */}
-      <Card className="bg-gradient-to-br from-indigo-50 to-purple-50 border-2">
+      {/* Timer Card */}
+      <Card className="bg-gradient-to-br from-amber-50 to-amber-100 border border-amber-200 shadow-md">
         <CardContent className="pt-4">
           <div className="space-y-6">
+
             {/* Mode Selector */}
             <div className="flex justify-center gap-4">
               <Button
                 variant={mode === 'focus' ? 'default' : 'outline'}
                 onClick={() => switchMode('focus')}
-                className={mode === 'focus' ? 'bg-indigo-600' : ''}
+                className={
+                  mode === 'focus'
+                    ? 'bg-[#4B2E23] hover:bg-[#3A241B] text-white'
+                    : 'border-amber-300 text-[#4B2E23]'
+                }
               >
                 <Brain className="w-4 h-4 mr-2" />
                 Focus (25min)
               </Button>
+
               <Button
                 variant={mode === 'break' ? 'default' : 'outline'}
                 onClick={() => switchMode('break')}
-                className={mode === 'break' ? 'bg-green-600' : ''}
+                className={
+                  mode === 'break'
+                    ? 'bg-[#4B2E23] hover:bg-[#3A241B] text-white'
+                    : 'border-amber-300 text-[#4B2E23]'
+                }
               >
                 <Coffee className="w-4 h-4 mr-2" />
                 Break (5min)
@@ -120,15 +122,18 @@ export function FocusTimer() {
             {/* Timer Display */}
             <div className="text-center space-y-4">
               <div className="relative">
-                <div className="text-7xl text-gray-900 tabular-nums">
+                <div className="text-7xl text-[#4B2E23] tabular-nums">
                   {formatTime(timeLeft)}
                 </div>
-                <p className="text-gray-600 mt-2">
+                <p className="text-amber-800 mt-2">
                   {mode === 'focus' ? 'Focus Time' : 'Break Time'}
                 </p>
               </div>
 
-              <Progress value={progress} className="h-2" />
+              <Progress
+                value={progress}
+                className="h-2 bg-amber-200"
+              />
             </div>
 
             {/* Controls */}
@@ -136,7 +141,7 @@ export function FocusTimer() {
               <Button
                 size="lg"
                 onClick={toggleTimer}
-                className={mode === 'focus' ? 'bg-indigo-600 hover:bg-indigo-700' : 'bg-green-600 hover:bg-green-700'}
+                className="bg-[#4B2E23] hover:bg-[#3A241B] text-white"
               >
                 {isRunning ? (
                   <>
@@ -150,16 +155,25 @@ export function FocusTimer() {
                   </>
                 )}
               </Button>
-              <Button size="lg" variant="outline" onClick={resetTimer}>
+
+              <Button
+                size="lg"
+                variant="outline"
+                onClick={resetTimer}
+                className="border-amber-300 text-[#4B2E23]"
+              >
                 <RotateCcw className="w-5 h-5 mr-2" />
                 Reset
               </Button>
             </div>
 
-            {/* Session Count */}
-            <div className="text-center pt-4 border-t">
-              <p className="text-sm text-gray-600">
-                Total Focus Sessions: <span className="text-indigo-600">{totalFocusSessions}</span>
+            {/* Sessions Counter */}
+            <div className="text-center pt-4 border-t border-amber-200">
+              <p className="text-sm text-amber-800">
+                Total Focus Sessions:{' '}
+                <span className="text-[#4B2E23] font-semibold">
+                  {totalFocusSessions}
+                </span>
               </p>
             </div>
           </div>
@@ -169,30 +183,34 @@ export function FocusTimer() {
       {/* Wellness Tools */}
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-gray-900">
+          <CardTitle className="flex items-center gap-2 text-[#4B2E23]">
             <Wind className="w-5 h-5" />
             Wellness Tools
           </CardTitle>
         </CardHeader>
+
         <CardContent>
           <Tabs defaultValue="breathing">
-            <TabsList className="grid w-full grid-cols-2">
+            <TabsList className="grid w-full grid-cols-2 bg-amber-100">
               <TabsTrigger value="breathing">Breathing</TabsTrigger>
               <TabsTrigger value="tips">Focus Tips</TabsTrigger>
             </TabsList>
+
+            {/* Breathing Exercises */}
             <TabsContent value="breathing" className="space-y-4">
-              <div className="p-4 bg-blue-50 rounded-lg">
-                <h4 className="text-gray-900 mb-2">4-7-8 Breathing Technique</h4>
-                <ol className="space-y-2 text-sm text-gray-700">
-                  <li>1. Breathe in through your nose for 4 seconds</li>
-                  <li>2. Hold your breath for 7 seconds</li>
-                  <li>3. Exhale slowly through your mouth for 8 seconds</li>
+              <div className="p-4 bg-amber-50 border border-amber-200 rounded-lg">
+                <h4 className="text-[#4B2E23] mb-2">4-7-8 Breathing Technique</h4>
+                <ol className="space-y-2 text-sm text-amber-800">
+                  <li>1. Breathe in for 4 seconds</li>
+                  <li>2. Hold for 7 seconds</li>
+                  <li>3. Exhale slowly for 8 seconds</li>
                   <li>4. Repeat 3-4 times</li>
                 </ol>
               </div>
-              <div className="p-4 bg-green-50 rounded-lg">
-                <h4 className="text-gray-900 mb-2">Box Breathing</h4>
-                <ol className="space-y-2 text-sm text-gray-700">
+
+              <div className="p-4 bg-amber-50 border border-amber-200 rounded-lg">
+                <h4 className="text-[#4B2E23] mb-2">Box Breathing</h4>
+                <ol className="space-y-2 text-sm text-amber-800">
                   <li>1. Inhale for 4 counts</li>
                   <li>2. Hold for 4 counts</li>
                   <li>3. Exhale for 4 counts</li>
@@ -200,24 +218,27 @@ export function FocusTimer() {
                 </ol>
               </div>
             </TabsContent>
+
+            {/* Tips */}
             <TabsContent value="tips" className="space-y-3">
-              <div className="p-4 bg-purple-50 rounded-lg">
-                <h4 className="text-gray-900 mb-2">🎯 Maximize Your Focus</h4>
-                <ul className="space-y-2 text-sm text-gray-700 list-disc list-inside">
-                  <li>Eliminate distractions before starting</li>
-                  <li>Keep water nearby to stay hydrated</li>
-                  <li>Use noise-canceling headphones or white noise</li>
-                  <li>Take breaks seriously - they're essential</li>
-                  <li>Stretch during breaks to improve circulation</li>
+              <div className="p-4 bg-amber-50 border border-amber-200 rounded-lg">
+                <h4 className="text-[#4B2E23] mb-2">🎯 Maximize Your Focus</h4>
+                <ul className="space-y-2 text-sm text-amber-800 list-disc list-inside">
+                  <li>Eliminate distractions</li>
+                  <li>Keep water nearby</li>
+                  <li>Use white noise if needed</li>
+                  <li>Respect your breaks</li>
+                  <li>Stretch between sessions</li>
                 </ul>
               </div>
-              <div className="p-4 bg-yellow-50 rounded-lg">
-                <h4 className="text-gray-900 mb-2">⚡ Energy Management</h4>
-                <ul className="space-y-2 text-sm text-gray-700 list-disc list-inside">
-                  <li>Schedule difficult tasks during peak energy hours</li>
-                  <li>Avoid heavy meals before focus sessions</li>
+
+              <div className="p-4 bg-amber-50 border border-amber-200 rounded-lg">
+                <h4 className="text-[#4B2E23] mb-2">⚡ Energy Management</h4>
+                <ul className="space-y-2 text-sm text-amber-800 list-disc list-inside">
+                  <li>Work during peak energy hours</li>
+                  <li>Avoid heavy meals mid-session</li>
                   <li>Natural light improves alertness</li>
-                  <li>Stand up and move during breaks</li>
+                  <li>Move during breaks</li>
                 </ul>
               </div>
             </TabsContent>

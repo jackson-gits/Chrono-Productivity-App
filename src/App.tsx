@@ -4,12 +4,22 @@ import { TaskManager } from "./components/TaskManager";
 import { FocusTimer } from "./components/FocusTimer";
 import { Analytics } from "./components/Analytics";
 import { Settings } from "./components/Settings";
-import { Home, CheckSquare, Timer, BarChart3, SettingsIcon, Cloud, CloudOff } from "lucide-react";
+import {
+  Home,
+  CheckSquare,
+  Timer,
+  BarChart3,
+  SettingsIcon,
+  Cloud,
+  CloudOff
+} from "lucide-react";
 import { useSupabaseSync } from "./hooks/useSupabaseSync";
 import { SplashScreen } from "./components/splash";
 import { LoginScreen } from "./components/login";
+import Logo from "./assets/logo.png";
 
-// Fake demo login functions – replace with Supabase auth
+import { AnimatePresence, motion } from "framer-motion";
+
 async function fakeLogin(email, password) {
   await new Promise((r) => setTimeout(r, 1000));
   return true;
@@ -22,8 +32,6 @@ async function fakeSignUp(email, password) {
 
 export default function App() {
   const [activeTab, setActiveTab] = useState("dashboard");
-
-  // NEW: Splash + Login control
   const [showSplash, setShowSplash] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
@@ -46,12 +54,8 @@ export default function App() {
     }
   };
 
-  // 1. Show splash screen first
-  if (showSplash) {
-    return <SplashScreen onComplete={() => setShowSplash(false)} />;
-  }
+  if (showSplash) return <SplashScreen onComplete={() => setShowSplash(false)} />;
 
-  // 2. Show login screen if user is NOT authenticated
   if (!isAuthenticated) {
     return (
       <LoginScreen
@@ -67,104 +71,151 @@ export default function App() {
     );
   }
 
-  // 3. Authenticated → show main app
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50">
-      {/* Header */}
-      <header className="bg-white border-b border-gray-200 sticky top-0 z-10 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-xl flex items-center justify-center">
-                <Timer className="w-6 h-6 text-white" />
-              </div>
-              <div>
-                <h1 className="text-indigo-900">Chrono</h1>
-                <p className="text-gray-500 text-sm">Productivity-Based Learning</p>
-              </div>
-            </div>
+    <div className="min-h-screen bg-white">
 
-            <div className="flex items-center gap-2">
-              {isLoading ? (
-                <div className="flex items-center gap-2 text-gray-500 text-sm">
-                  <Cloud className="w-4 h-4 animate-pulse" />
-                  <span>Syncing...</span>
-                </div>
-              ) : error ? (
-                <div className="flex items-center gap-2 text-orange-600 text-sm">
-                  <CloudOff className="w-4 h-4" />
-                  <span>Offline</span>
-                </div>
-              ) : (
-                <div className="flex items-center gap-2 text-green-600 text-sm">
-                  <Cloud className="w-4 h-4" />
-                  <span>Synced</span>
-                </div>
-              )}
-            </div>
-          </div>
+      {/* HEADER FIXED */}
+      <header className="bg-white border-b border-gray-200 sticky top-0 z-10">
+  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+    <div className="flex items-center justify-between">
+
+      {/* Logo + Title */}
+      <div className="flex items-center gap-3">
+
+        {/* Fully-Filled Rounded Image */}
+        <div className="h-12 w-17 rounded-xl overflow-hidden shadow-sm border border-gray-200">
+          <img
+            src={Logo}
+            alt="Chrono Logo"
+            className="
+              h-16   w-16 
+              object-cover 
+              object-center
+              block
+            "
+          />
         </div>
-      </header>
 
-      {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 pb-24">{renderContent()}</main>
+        <div className="leading-tight">
+          <h1 className="text-gray-900 font-semibold text-lg">Chrono</h1>
+          <p className="text-gray-500 text-sm">Productivity-Based Learning</p>
+        </div>
+      </div>
 
-      {/* Bottom Navigation */}
+      {/* Sync Status */}
+      <div className="flex items-center gap-2 bg-gray-50 px-3 py-1.5 rounded-full border border-gray-200 shadow-sm">
+        {isLoading ? (
+          <div className="flex items-center gap-1 text-gray-600 text-sm">
+            <Cloud className="w-4 h-4 animate-pulse" />
+            <span>Syncing...</span>
+          </div>
+        ) : error ? (
+          <div className="flex items-center gap-1 text-red-600 text-sm">
+            <CloudOff className="w-4 h-4" />
+            <span>Offline</span>
+          </div>
+        ) : (
+          <div className="flex items-center gap-1 text-green-600 text-sm">
+            <Cloud className="w-4 h-4" />
+            <span>Synced</span>
+          </div>
+        )}
+      </div>
+
+    </div>
+  </div>
+</header>
+
+
+      {/* MAIN CONTENT - WHITE */}
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 pb-24 bg-white min-h-[calc(100vh-120px)]">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={activeTab}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.25, ease: "easeOut" }}
+          >
+            {renderContent()}
+          </motion.div>
+        </AnimatePresence>
+      </main>
+
+      {/* NAVBAR FIXED */}
       <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="flex justify-around items-center py-3">
-            <button
-              onClick={() => setActiveTab("dashboard")}
-              className={`flex flex-col items-center gap-1 px-4 py-2 rounded-lg ${
-                activeTab === "dashboard" ? "text-indigo-600 bg-indigo-50" : "text-gray-600"
-              }`}
-            >
-              <Home className="w-6 h-6" />
-              <span className="text-xs">Home</span>
-            </button>
+  <div className="max-w-7xl mx-auto px-4">
+    <div className="flex justify-around items-center py-3">
 
-            <button
-              onClick={() => setActiveTab("tasks")}
-              className={`flex flex-col items-center gap-1 px-4 py-2 rounded-lg ${
-                activeTab === "tasks" ? "text-indigo-600 bg-indigo-50" : "text-gray-600"
-              }`}
-            >
-              <CheckSquare className="w-6 h-6" />
-              <span className="text-xs">Tasks</span>
-            </button>
+      {/* Home */}
+      <button
+        onClick={() => setActiveTab("dashboard")}
+        className={`flex flex-col items-center gap-1 px-4 py-2 rounded-lg transition ${
+          activeTab === "dashboard"
+            ? "text-[#4B2E23] bg-[#FFE7C2]"          // Active
+            : "text-[#7B5A4A] hover:bg-[#FFF2D9]"   // Inactive
+        }`}
+      >
+        <Home className="w-6 h-6" />
+        <span className="text-xs font-medium">Home</span>
+      </button>
 
-            <button
-              onClick={() => setActiveTab("focus")}
-              className={`flex flex-col items-center gap-1 px-4 py-2 rounded-lg ${
-                activeTab === "focus" ? "text-indigo-600 bg-indigo-50" : "text-gray-600"
-              }`}
-            >
-              <Timer className="w-6 h-6" />
-              <span className="text-xs">Focus</span>
-            </button>
+      {/* Tasks */}
+      <button
+        onClick={() => setActiveTab("tasks")}
+        className={`flex flex-col items-center gap-1 px-4 py-2 rounded-lg transition ${
+          activeTab === "tasks"
+            ? "text-[#4B2E23] bg-[#FFE7C2]"
+            : "text-[#7B5A4A] hover:bg-[#FFF2D9]"
+        }`}
+      >
+        <CheckSquare className="w-6 h-6" />
+        <span className="text-xs font-medium">Tasks</span>
+      </button>
 
-            <button
-              onClick={() => setActiveTab("analytics")}
-              className={`flex flex-col items-center gap-1 px-4 py-2 rounded-lg ${
-                activeTab === "analytics" ? "text-indigo-600 bg-indigo-50" : "text-gray-600"
-              }`}
-            >
-              <BarChart3 className="w-6 h-6" />
-              <span className="text-xs">Analytics</span>
-            </button>
+      {/* Focus */}
+      <button
+        onClick={() => setActiveTab("focus")}
+        className={`flex flex-col items-center gap-1 px-4 py-2 rounded-lg transition ${
+          activeTab === "focus"
+            ? "text-[#4B2E23] bg-[#FFE7C2]"
+            : "text-[#7B5A4A] hover:bg-[#FFF2D9]"
+        }`}
+      >
+        <Timer className="w-6 h-6" />
+        <span className="text-xs font-medium">Focus</span>
+      </button>
 
-            <button
-              onClick={() => setActiveTab("settings")}
-              className={`flex flex-col items-center gap-1 px-4 py-2 rounded-lg ${
-                activeTab === "settings" ? "text-indigo-600 bg-indigo-50" : "text-gray-600"
-              }`}
-            >
-              <SettingsIcon className="w-6 h-6" />
-              <span className="text-xs">Settings</span>
-            </button>
-          </div>
-        </div>
-      </nav>
+      {/* Analytics */}
+      <button
+        onClick={() => setActiveTab("analytics")}
+        className={`flex flex-col items-center gap-1 px-4 py-2 rounded-lg transition ${
+          activeTab === "analytics"
+            ? "text-[#4B2E23] bg-[#FFE7C2]"
+            : "text-[#7B5A4A] hover:bg-[#FFF2D9]"
+        }`}
+      >
+        <BarChart3 className="w-6 h-6" />
+        <span className="text-xs font-medium">Analytics</span>
+      </button>
+
+      {/* Settings */}
+      <button
+        onClick={() => setActiveTab("settings")}
+        className={`flex flex-col items-center gap-1 px-4 py-2 rounded-lg transition ${
+          activeTab === "settings"
+            ? "text-[#4B2E23] bg-[#FFE7C2]"
+            : "text-[#7B5A4A] hover:bg-[#FFF2D9]"
+        }`}
+      >
+        <SettingsIcon className="w-6 h-6" />
+        <span className="text-xs font-medium">Settings</span>
+      </button>
+
+    </div>
+  </div>
+</nav>
+
     </div>
   );
 }

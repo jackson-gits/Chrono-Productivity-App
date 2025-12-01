@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Zap, Mail, Lock, ArrowRight, AlertCircle } from 'lucide-react';
+import { Mail, Lock, ArrowRight, AlertCircle } from 'lucide-react';
+import Logo from "../assets/logoslo.png";
 
 interface LoginScreenProps {
   onLogin: (email: string, password: string) => Promise<void>;
@@ -44,24 +45,47 @@ export function LoginScreen({ onLogin, onSignUp, isLoading = false }: LoginScree
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
-        <div className="bg-white rounded-2xl shadow-2xl overflow-hidden">
-          {/* Top Branding Section */}
-          <div className="bg-gradient-to-r from-blue-500 to-cyan-400 p-8 text-center">
-            <div className="flex justify-center mb-4">
-              <div className="bg-white p-3 rounded-xl">
-                <Zap className="w-8 h-8 text-blue-500" />
+        <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
+
+          {/* Branding */}
+          <div className="bg-gradient-to-r from-amber-400 to-orange-500 p-8 text-center">
+
+            <div className="flex justify-center mb-6">
+              <div
+                className="
+                  w-40 h-
+                  rounded-2xl
+                  overflow-hidden 
+                  shadow-[0_8px_20px_rgba(0,0,0,0.12)]
+                  border border-[#D6B59C]
+                  transform transition-all
+                  hover:scale-105 hover:shadow-[0_12px_30px_rgba(0,0,0,0.18)]
+                  bg-amber-50
+                "
+              >
+                <img
+                  src={Logo}
+                  alt="Chrono Logo"
+                  className="w-full h-full object-cover"
+                />
               </div>
             </div>
-            <h1 className="text-2xl font-bold text-blue-500">Chrono</h1>
-            <p className="text-black-500 text-sm mt-1">Master your time, own your productivity</p>
+
+            <h1 className="text-2xl font-bold tracking-wide" style={{ color: "#4B2E23" }}>
+              Chrono
+            </h1>
+            <p className="mt-1" style={{ color: "#4B2E23" }}>
+              Master your time with clarity
+            </p>
           </div>
 
-          {/* Main Form */}
+          {/* Form */}
           <div className="p-8">
-            {/* Toggle Buttons */}
-            <div className="flex gap-2 mb-6 bg-gray-100 p-1 rounded-lg">
+
+            {/* Toggle */}
+            <div className="flex gap-2 mb-6 bg-amber-100 p-1 rounded-lg">
               <button
                 onClick={() => {
                   setIsSignUp(false);
@@ -71,7 +95,7 @@ export function LoginScreen({ onLogin, onSignUp, isLoading = false }: LoginScree
                   setConfirmPassword('');
                 }}
                 className={`flex-1 py-2 px-4 rounded font-medium transition ${
-                  !isSignUp ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-600 hover:text-gray-900'
+                  !isSignUp ? 'bg-white text-[#4B2E23] shadow-sm' : 'text-[#4B2E23]'
                 }`}
               >
                 Sign In
@@ -86,16 +110,16 @@ export function LoginScreen({ onLogin, onSignUp, isLoading = false }: LoginScree
                   setConfirmPassword('');
                 }}
                 className={`flex-1 py-2 px-4 rounded font-medium transition ${
-                  isSignUp ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-600 hover:text-gray-900'
+                  isSignUp ? 'bg-white text-[#4B2E23] shadow-sm' : 'text-[#4B2E23]'
                 }`}
               >
                 Sign Up
               </button>
             </div>
 
-            {/* Form Fields */}
             <form onSubmit={handleSubmit} className="space-y-4">
-              {/* Error Banner */}
+
+              {/* Error */}
               {error && (
                 <div className="flex gap-3 p-3 bg-red-50 border border-red-200 rounded-lg">
                   <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
@@ -105,9 +129,14 @@ export function LoginScreen({ onLogin, onSignUp, isLoading = false }: LoginScree
 
               {/* Email */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                <label className="block text-sm font-medium mb-2" style={{ color: "#4B2E23" }}>
+                  Email
+                </label>
                 <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                  <Mail
+                    className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5"
+                    style={{ color: "#4B2E23" }}
+                  />
                   <input
                     type="email"
                     value={email}
@@ -115,16 +144,23 @@ export function LoginScreen({ onLogin, onSignUp, isLoading = false }: LoginScree
                     placeholder="you@example.com"
                     required
                     disabled={isSubmitting || isLoading}
-                    className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-50 disabled:text-gray-500"
+                    className="w-full pl-10 pr-4 py-2.5 border border-[#B08A76] rounded-lg 
+                    focus:outline-none focus:ring-2 focus:ring-[#4B2E23] 
+                    disabled:bg-amber-50 disabled:text-amber-500"
                   />
                 </div>
               </div>
 
               {/* Password */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Password</label>
+                <label className="block text-sm font-medium mb-2" style={{ color: "#4B2E23" }}>
+                  Password
+                </label>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                  <Lock
+                    className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5"
+                    style={{ color: "#4B2E23" }}
+                  />
                   <input
                     type="password"
                     value={password}
@@ -132,19 +168,24 @@ export function LoginScreen({ onLogin, onSignUp, isLoading = false }: LoginScree
                     placeholder="••••••••"
                     required
                     disabled={isSubmitting || isLoading}
-                    className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-50 disabled:text-gray-500"
+                    className="w-full pl-10 pr-4 py-2.5 border border-[#B08A76] rounded-lg 
+                    focus:outline-none focus:ring-2 focus:ring-[#4B2E23] 
+                    disabled:bg-amber-50 disabled:text-amber-500"
                   />
                 </div>
               </div>
 
-              {/* Confirm Password (Sign Up only) */}
+              {/* Confirm Password */}
               {isSignUp && (
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium mb-2" style={{ color: "#4B2E23" }}>
                     Confirm Password
                   </label>
                   <div className="relative">
-                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                    <Lock
+                      className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5"
+                      style={{ color: "#4B2E23" }}
+                    />
                     <input
                       type="password"
                       value={confirmPassword}
@@ -152,19 +193,21 @@ export function LoginScreen({ onLogin, onSignUp, isLoading = false }: LoginScree
                       placeholder="••••••••"
                       required
                       disabled={isSubmitting || isLoading}
-                      className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-50 disabled:text-gray-500"
+                      className="w-full pl-10 pr-4 py-2.5 border border-[#B08A76] rounded-lg 
+                      focus:outline-none focus:ring-2 focus:ring-[#4B2E23]"
                     />
                   </div>
                 </div>
               )}
 
-              {/* Submit Button */}
+              {/* Submit */}
               <button
-  type="submit"
-  disabled={isSubmitting || isLoading}
-  className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 mt-6"
->
-
+                type="submit"
+                disabled={isSubmitting || isLoading}
+                className="w-full bg-[#4B2E23] hover:bg-[#3C241B] text-white font-semibold py-2.5 
+                rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed 
+                flex items-center justify-center gap-2 mt-6"
+              >
                 {isSubmitting || isLoading ? (
                   <>
                     <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
@@ -179,8 +222,8 @@ export function LoginScreen({ onLogin, onSignUp, isLoading = false }: LoginScree
               </button>
             </form>
 
-            {/* Mode Switch */}
-            <p className="text-center text-gray-600 text-sm mt-6">
+            {/* Switch */}
+            <p className="text-center text-sm mt-6" style={{ color: "#4B2E23" }}>
               {isSignUp ? 'Already have an account? ' : "Don't have an account? "}
               <button
                 onClick={() => {
@@ -190,7 +233,8 @@ export function LoginScreen({ onLogin, onSignUp, isLoading = false }: LoginScree
                   setPassword('');
                   setConfirmPassword('');
                 }}
-                className="text-blue-600 hover:text-blue-700 font-semibold"
+                className="font-semibold"
+                style={{ color: "#4B2E23" }}
               >
                 {isSignUp ? 'Sign In' : 'Sign Up'}
               </button>
@@ -198,7 +242,7 @@ export function LoginScreen({ onLogin, onSignUp, isLoading = false }: LoginScree
           </div>
         </div>
 
-        <p className="text-center text-grey-400 text-xs mt-6">
+        <p className="text-center text-xs mt-6" style={{ color: "#4B2E23" }}>
           © 2025 Chrono. All rights reserved.
         </p>
       </div>
