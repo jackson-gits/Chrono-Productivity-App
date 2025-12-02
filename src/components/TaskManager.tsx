@@ -213,7 +213,7 @@ export function TaskManager() {
       <div className="space-y-3">
         {filteredTasks.length === 0 ? (
           <Card>
-            <CardContent className="py-12 text-center">
+            <CardContent className="pb-4 text-center pt-4">
               <p className="text-amber-800">
                 No tasks found. Create your first task to get started!
               </p>

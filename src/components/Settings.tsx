@@ -5,6 +5,7 @@ import { Switch } from './ui/switch';
 import { Label } from './ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { Slider } from './ui/slider';
+import { supabase } from "../utils/supabase";
 import { DataViewer } from './DataViewer';
 import React from 'react';
 
@@ -24,7 +25,7 @@ export function Settings() {
     autoStartBreak: false,
   });
   useEffect(() => {
-    const root = document.documentElement;
+    const root = document.documentElement;   
   
     if (preferences.theme === "dark") {
       root.classList.add("dark");
@@ -333,6 +334,28 @@ export function Settings() {
           </div>
         </CardContent>
       </Card>
+      {/* Logout Button */}
+<button
+  onClick={async () => {
+    try {
+      await supabase.auth.signOut();
+      window.location.reload(); // forces App.jsx to switch to LoginScreen
+    } catch (err) {
+      console.error("Logout failed:", err);
+    }
+  }}
+  className="
+    w-full mt-4 
+    bg-[#4B2E23] text-white 
+    py-3 rounded-lg 
+    font-semibold 
+    hover:bg-[#3A241B] 
+    transition
+  "
+>
+  Log Out
+</button>
+
     </div>
   );
 }

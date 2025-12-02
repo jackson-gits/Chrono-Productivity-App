@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
 import { Button } from './ui/button';
 import { Database, RefreshCw } from 'lucide-react';
-import { api } from '../utils/api';
+import { supabase } from '../utils/supabase';
 
 export function DataViewer() {
   const [data, setData] = useState<any>(null);
@@ -12,9 +12,9 @@ export function DataViewer() {
     setLoading(true);
     try {
       const [tasks, sessions, userData] = await Promise.all([
-        api.getTasks(),
-        api.getFocusSessions(),
-        api.getUserData(),
+        supabase.getTasks(),
+        supabase.getFocusSessions(),
+        supabase.getUserData(),
       ]);
       
       setData({

@@ -1,6 +1,8 @@
-import { useState } from 'react';
-import { Mail, Lock, ArrowRight, AlertCircle } from 'lucide-react';
+import { useState } from "react";
+import { Mail, Lock, ArrowRight, AlertCircle } from "lucide-react";
 import Logo from "../assets/logoslo.png";
+import { supabase } from "../utils/supabase";
+import { Browser } from "@capacitor/browser";
 
 interface LoginScreenProps {
   onLogin: (email: string, password: string) => Promise<void>;
@@ -8,28 +10,61 @@ interface LoginScreenProps {
   isLoading?: boolean;
 }
 
-export function LoginScreen({ onLogin, onSignUp, isLoading = false }: LoginScreenProps) {
+export function LoginScreen({
+  onLogin,
+  onSignUp,
+  isLoading = false,
+}: LoginScreenProps) {
   const [isSignUp, setIsSignUp] = useState(false);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [error, setError] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // -----------------------------
+  // GOOGLE LOGIN HANDLER
+  // -----------------------------
+  const handleGoogleLogin = async () => {
+    setError("");
+    setIsSubmitting(true);
+
+    try {
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: {
+          redirectTo: "myapp://auth/callback", // must match your deep link
+        },
+      });
+
+      if (error) throw error;
+
+      // Open in device browser
+      await Browser.open({ url: data.url });
+    } catch (err: any) {
+      setError(err.message || "Google login failed");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  // -----------------------------
+  // EMAIL/PASSWORD HANDLER
+  // -----------------------------
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
+    setError("");
     setIsSubmitting(true);
 
     try {
       if (isSignUp) {
         if (password !== confirmPassword) {
-          setError('Passwords do not match');
+          setError("Passwords do not match");
           setIsSubmitting(false);
           return;
         }
         if (password.length < 6) {
-          setError('Password must be at least 6 characters');
+          setError("Password must be at least 6 characters");
           setIsSubmitting(false);
           return;
         }
@@ -38,37 +73,36 @@ export function LoginScreen({ onLogin, onSignUp, isLoading = false }: LoginScree
         await onLogin(email, password);
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred');
+      setError(err instanceof Error ? err.message : "An error occurred");
     } finally {
       setIsSubmitting(false);
     }
   };
 
+  // -----------------------------
+  // UI
+  // -----------------------------
   return (
     <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
-
           {/* Branding */}
           <div className="bg-gradient-to-r from-amber-400 to-orange-500 p-8 text-center">
-
             <div className="flex justify-center mb-6">
               <div
                 className="
-                  w-40 h-
+                  w-40 h-40
                   rounded-2xl
-                  overflow-hidden 
+                  overflow-hidden
                   shadow-[0_8px_20px_rgba(0,0,0,0.12)]
                   border border-[#D6B59C]
-                  transform transition-all
-                  hover:scale-105 hover:shadow-[0_12px_30px_rgba(0,0,0,0.18)]
                   bg-amber-50
                 "
               >
                 <img
                   src={Logo}
-                  alt="Chrono Logo"
-                  className="w-full h-full object-cover"
+                  alt='Chrono Logo'
+                  className='w-full h-full object-cover'
                 />
               </div>
             </div>
@@ -83,19 +117,15 @@ export function LoginScreen({ onLogin, onSignUp, isLoading = false }: LoginScree
 
           {/* Form */}
           <div className="p-8">
-
             {/* Toggle */}
             <div className="flex gap-2 mb-6 bg-amber-100 p-1 rounded-lg">
               <button
                 onClick={() => {
                   setIsSignUp(false);
-                  setError('');
-                  setEmail('');
-                  setPassword('');
-                  setConfirmPassword('');
+                  setError("");
                 }}
                 className={`flex-1 py-2 px-4 rounded font-medium transition ${
-                  !isSignUp ? 'bg-white text-[#4B2E23] shadow-sm' : 'text-[#4B2E23]'
+                  !isSignUp ? "bg-white text-[#4B2E23] shadow-sm" : "text-[#4B2E23]"
                 }`}
               >
                 Sign In
@@ -104,13 +134,10 @@ export function LoginScreen({ onLogin, onSignUp, isLoading = false }: LoginScree
               <button
                 onClick={() => {
                   setIsSignUp(true);
-                  setError('');
-                  setEmail('');
-                  setPassword('');
-                  setConfirmPassword('');
+                  setError("");
                 }}
                 className={`flex-1 py-2 px-4 rounded font-medium transition ${
-                  isSignUp ? 'bg-white text-[#4B2E23] shadow-sm' : 'text-[#4B2E23]'
+                  isSignUp ? "bg-white text-[#4B2E23] shadow-sm" : "text-[#4B2E23]"
                 }`}
               >
                 Sign Up
@@ -118,8 +145,7 @@ export function LoginScreen({ onLogin, onSignUp, isLoading = false }: LoginScree
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-4">
-
-              {/* Error */}
+              {/* Errors */}
               {error && (
                 <div className="flex gap-3 p-3 bg-red-50 border border-red-200 rounded-lg">
                   <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
@@ -133,20 +159,15 @@ export function LoginScreen({ onLogin, onSignUp, isLoading = false }: LoginScree
                   Email
                 </label>
                 <div className="relative">
-                  <Mail
-                    className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5"
-                    style={{ color: "#4B2E23" }}
-                  />
+                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5" style={{ color: "#4B2E23" }} />
                   <input
                     type="email"
+                    required
+                    disabled={isSubmitting || isLoading}
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="you@example.com"
-                    required
-                    disabled={isSubmitting || isLoading}
-                    className="w-full pl-10 pr-4 py-2.5 border border-[#B08A76] rounded-lg 
-                    focus:outline-none focus:ring-2 focus:ring-[#4B2E23] 
-                    disabled:bg-amber-50 disabled:text-amber-500"
+                    className="w-full pl-10 pr-4 py-2.5 border border-[#B08A76] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4B2E23]"
                   />
                 </div>
               </div>
@@ -157,44 +178,35 @@ export function LoginScreen({ onLogin, onSignUp, isLoading = false }: LoginScree
                   Password
                 </label>
                 <div className="relative">
-                  <Lock
-                    className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5"
-                    style={{ color: "#4B2E23" }}
-                  />
+                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5" style={{ color: "#4B2E23" }} />
                   <input
                     type="password"
+                    required
+                    disabled={isSubmitting || isLoading}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="••••••••"
-                    required
-                    disabled={isSubmitting || isLoading}
-                    className="w-full pl-10 pr-4 py-2.5 border border-[#B08A76] rounded-lg 
-                    focus:outline-none focus:ring-2 focus:ring-[#4B2E23] 
-                    disabled:bg-amber-50 disabled:text-amber-500"
+                    className="w-full pl-10 pr-4 py-2.5 border border-[#B08A76] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4B2E23]"
                   />
                 </div>
               </div>
 
-              {/* Confirm Password */}
+              {/* Confirm password (sign up only) */}
               {isSignUp && (
                 <div>
                   <label className="block text-sm font-medium mb-2" style={{ color: "#4B2E23" }}>
                     Confirm Password
                   </label>
                   <div className="relative">
-                    <Lock
-                      className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5"
-                      style={{ color: "#4B2E23" }}
-                    />
+                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5" style={{ color: "#4B2E23" }} />
                     <input
                       type="password"
+                      required
+                      disabled={isSubmitting || isLoading}
                       value={confirmPassword}
                       onChange={(e) => setConfirmPassword(e.target.value)}
                       placeholder="••••••••"
-                      required
-                      disabled={isSubmitting || isLoading}
-                      className="w-full pl-10 pr-4 py-2.5 border border-[#B08A76] rounded-lg 
-                      focus:outline-none focus:ring-2 focus:ring-[#4B2E23]"
+                      className="w-full pl-10 pr-4 py-2.5 border border-[#B08A76] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4B2E23]"
                     />
                   </div>
                 </div>
@@ -204,9 +216,7 @@ export function LoginScreen({ onLogin, onSignUp, isLoading = false }: LoginScree
               <button
                 type="submit"
                 disabled={isSubmitting || isLoading}
-                className="w-full bg-[#4B2E23] hover:bg-[#3C241B] text-white font-semibold py-2.5 
-                rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed 
-                flex items-center justify-center gap-2 mt-6"
+                className="w-full bg-[#4B2E23] hover:bg-[#3C241B] text-white font-semibold py-2.5 rounded-lg transition flex items-center justify-center gap-2 mt-6"
               >
                 {isSubmitting || isLoading ? (
                   <>
@@ -215,28 +225,42 @@ export function LoginScreen({ onLogin, onSignUp, isLoading = false }: LoginScree
                   </>
                 ) : (
                   <>
-                    {isSignUp ? 'Create Account' : 'Sign In'}
+                    {isSignUp ? "Create Account" : "Sign In"}
                     <ArrowRight className="w-4 h-4" />
                   </>
                 )}
               </button>
             </form>
 
+            {/* GOOGLE LOGIN BUTTON */}
+            <button
+              onClick={handleGoogleLogin}
+              disabled={isSubmitting || isLoading}
+              className="
+                w-full bg-white text-[#4B2E23] font-semibold py-2.5 
+                rounded-lg border border-[#B08A76] shadow-sm 
+                hover:bg-amber-50 transition flex items-center justify-center gap-3 mt-4
+              "
+            >
+              <img
+                src="https://www.svgrepo.com/show/475656/google-color.svg"
+                className="w-5 h-5"
+              />
+              Continue with Google
+            </button>
+
             {/* Switch */}
             <p className="text-center text-sm mt-6" style={{ color: "#4B2E23" }}>
-              {isSignUp ? 'Already have an account? ' : "Don't have an account? "}
+              {isSignUp ? "Already have an account? " : "Don't have an account? "}
               <button
                 onClick={() => {
                   setIsSignUp(!isSignUp);
-                  setError('');
-                  setEmail('');
-                  setPassword('');
-                  setConfirmPassword('');
+                  setError("");
                 }}
                 className="font-semibold"
                 style={{ color: "#4B2E23" }}
               >
-                {isSignUp ? 'Sign In' : 'Sign Up'}
+                {isSignUp ? "Sign In" : "Sign Up"}
               </button>
             </p>
           </div>
